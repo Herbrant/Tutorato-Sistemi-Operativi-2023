@@ -1,4 +1,4 @@
-# Homework n.1
+# Homework 1
 Scrivere un programma in linguaggio C che permetta di copiare un numero arbitrario di file regolari su una directory di destinazione preesistente.
 
 Il programma dovra' accettare una sintassi del tipo:

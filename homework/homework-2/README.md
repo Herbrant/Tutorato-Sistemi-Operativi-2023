@@ -1,4 +1,4 @@
-# Homework n.2
+# Homework 2
 Implementare il comando *mv* supportando i seguenti casi:
 - spostamento sullo stesso filesystem: individuato tale caso, il file deve essere spostato utilizzando gli *hard link* 
 - spostamento cross-filesystem: individuato tale caso, il file deve essere
