@@ -12,9 +12,10 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 - [Homework 3](./homework/homework-3/): sorting
 - [Homework 4](./homework/homework-4/): Comando *cp* con ricorsione (estensione dell'homework 1)
 
-<!-- ## Exams
-- [Morra Cinese](./exams/morra-cinese/)
-- [Seek Time](./exams/seek-time/)
+## Prove d'esame
+- [Morra Cinese (variabili condizione)](./exams/morra-cinese-cond/)
+- [Morra Cinese (semafori)](./exams/morra-cinese-sem/)
+<!-- - [Seek Time](./exams/seek-time/)
 - [Raid Simulator](./exams/raid-simulator/)
 - [Polynomials](./exams/polynomials/)
 - [Binary Search Tree](./exams/binary-search-tree/) -->
