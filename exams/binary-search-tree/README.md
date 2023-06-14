@@ -4,9 +4,9 @@ Creare un programma **binary-search-tree.c** in linguaggio C che accetti invocaz
 binary-search-tree <input-file-1> <input-file-2> <...>
 ```
 
-Al suo avvio, il programma creerà un numero, non predeterminati, di thread pari a quello dei file di input indicati sulla riga di comando. Tali thread comunicheranno con il thread padre attraverso un certo numero di semafori (minimo a scelta dello studente).
+Al suo avvio, il programma creerà un numero, non predeterminato, di thread pari a quello dei file di input indicati sulla riga di comando. Tali thread comunicheranno con il thread padre attraverso un certo numero di semafori (minimo a scelta dello studente).
 
-Ciascun thread, al suo avvio creerà e terrà in memoria un *binary-search-tree* di interi a partire dal file a lui destinato. Il file conterrà un certo numero di chiavi, discuna delle quali separata da un ritorno a capo (`\n`).
+Ciascun thread, al suo avvio creerà e terrà in memoria un *binary-search-tree* di interi a partire dal file a lui destinato. Il file conterrà un certo numero di chiavi, ciascuna delle quali separata da un ritorno a capo (`\n`).
 
 Il programma dovrà offrire una shell interattiva che accetta le seguenti richieste:
 - **add n key**: aggiunge un nodo con chiave *key* all'*n*-esimo BST;
