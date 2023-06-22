@@ -1,20 +1,14 @@
+#include "../lib/lib-misc.h"
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #define TO_MOVE 3
 
 typedef enum { PLAYER1_N, PLAYER2_N, JUDGE_N, SCOREBOARD_N } thread_n;
 typedef enum { CARTA, FORBICE, SASSO } mossa;
 char *nome_mosse[3] = {"carta", "forbice", "sasso"};
-
-#define exit_with_err(s, e)                                                    \
-    do {                                                                       \
-        fprintf(stderr, "%s: %s\n", (s), strerror((e)));                       \
-        exit(EXIT_FAILURE);                                                    \
-    } while (0)
 
 typedef struct {
     mossa mosse[2];     // mosse dei giocatori per la partita corrente
@@ -238,7 +232,7 @@ int main(int argc, char **argv) {
 
     // alloco dinamicamente la struttura dati condivisa
     match *m = malloc(sizeof(match));
-    
+
     m->n_matches = n_matches;
 
     // imposto le mosse dei player a TO_MOVE in modo che questi possano
