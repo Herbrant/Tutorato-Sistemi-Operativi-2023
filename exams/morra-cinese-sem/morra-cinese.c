@@ -143,13 +143,13 @@ void scoreboard(void *arg) {
     td->match->done = 1;
 
     if ((err = sem_post(&td->match->sem[PLAYER1_N])) != 0)
-        exit_with_err("pthread_cond_signal", err);
+        exit_with_err("sem_post", err);
     if ((err = sem_post(&td->match->sem[PLAYER2_N])) != 0)
-        exit_with_err("pthread_cond_signal", err);
+        exit_with_err("sem_post", err);
 
     for (int i = 0; i < 2; i++)
         if ((err = sem_post(&td->match->sem[JUDGE_N])) != 0)
-            exit_with_err("pthread_cond_signal", err);
+            exit_with_err("sem_post", err);
 
     pthread_exit(NULL);
 }
