@@ -187,8 +187,12 @@ void scoreboard(void *arg) {
             td->match->vincitore = 0;
         } else { // ultima partita (fine del torneo)
             printf("T: classifica finale: %d %d\n", scores[0], scores[1]);
-            printf("T: vincitore del torneo: P%d\n",
-                   scores[0] > scores[1] ? 1 : 2);
+
+            if (scores[0] == scores[1])
+                printf("T: il torneo è finito in parità.\n");
+            else
+                printf("T: vincitore del torneo: P%d\n",
+                       scores[0] > scores[1] ? 1 : 2);
 
             // imposto il campo done a 1 per segnalare agli
             // altri thread che il torneo è finito

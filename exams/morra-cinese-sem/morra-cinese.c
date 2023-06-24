@@ -134,7 +134,12 @@ void scoreboard(void *arg) {
     }
 
     printf("T: classifica finale: %d %d\n", scores[0], scores[1]);
-    printf("T: vincitore del torneo: P%d\n", scores[0] > scores[1] ? 1 : 2);
+
+    if (scores[0] == scores[1])
+        printf("T: il torneo è finito in parità.\n");
+    else
+        printf("T: vincitore del torneo: P%d\n", scores[0] > scores[1] ? 1 : 2);
+
     td->match->done = 1;
 
     if ((err = sem_post(&td->match->sem[PLAYER1_N])) != 0)
