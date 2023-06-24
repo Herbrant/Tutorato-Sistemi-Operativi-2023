@@ -19,3 +19,17 @@ Il thread **P**, dopo le operazioni preliminari sopra indicate, leggerà il cont
 Dopo che tutte le lettere del file saranno state "analizzate" e le statistiche aggiornate, allora il thread **P** provvederà a stampare a video le statistiche presenti all'interno di **stats** e tutti i thread termineranno spontaneamente.
 
 Tutte le strutture dati utilizzate dovranno essere ripulite correttamente all'uscita.
+
+## Esempio di esecuzione
+```bash
+$ alpha-stats ./granni-granni.txt
+
+Statistiche sul file: granni-granni.txt
+a: 104  b: 2    c: 47   d: 24 
+e: 34   f: 3    g: 19   h: 19
+i: 122  j: 3    k: 0    l: 10 
+m: 31   n: 96   o: 10   p: 28   
+q: 0    r: 44   s: 25   t: 43   
+u: 51   v: 11   w: 0    x: 0    
+y: 0    z: 2
+```
