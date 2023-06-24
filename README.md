@@ -23,4 +23,5 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 ## Prove d'esame
 - [Morra Cinese (semafori)](./exams/morra-cinese-sem/)
 - [Morra Cinese (variabili condizione)](./exams/morra-cinese-cond/)
+- [Alpha stats](./exams/alpha-stats/)
 - [Binary Search Tree](./exams/binary-search-tree/)
