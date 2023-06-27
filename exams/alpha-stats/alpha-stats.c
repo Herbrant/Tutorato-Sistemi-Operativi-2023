@@ -129,29 +129,24 @@ int main(int argc, char **argv) {
     // leggo il file carattere per carattere
     int i = 0;
 
-    while (1) {
-        // scorro l'array fin quando non trovo uno dei caratteri da considerare
-        while (i < s_file.st_size && !(map[i] >= 'a' && map[i] <= 'z') &&
-               !(map[i] >= 'A' && map[i] <= 'Z'))
-            i++;
+    while (i < s_file.st_size) {
+        if ((map[i] >= 'a' && map[i] <= 'z') ||
+            (map[i] >= 'A' && map[i] <= 'Z')) {
+            // aspetto che il thread lettore abbia completato
+            if ((err = sem_wait(&sh->sem[PARENT_N])) != 0)
+                exit_with_err("sem_wait", err);
 
-        if (i == s_file.st_size) // ho finito di leggere il file
-            break;
+            // inserisco il carattere nella struttura dati condivisa
+            sh->c = tolower(map[i]);
 
-        // aspetto che il thread lettore abbia completato
-        if ((err = sem_wait(&sh->sem[PARENT_N])) != 0)
-            exit_with_err("sem_wait", err);
-
-        // inserisco il carattere nella struttura dati condivisa
-        sh->c = tolower(map[i]);
-
-        // sveglio il thread che deve gestire il carattere
-        if (map[i] <= 'l') {
-            if ((err = sem_post(&sh->sem[AL_N])) != 0)
-                exit_with_err("sem_post", err);
-        } else {
-            if ((err = sem_post(&sh->sem[MZ_N])) != 0)
-                exit_with_err("sem_post", err);
+            // sveglio il thread che deve gestire il carattere
+            if (map[i] <= 'l') {
+                if ((err = sem_post(&sh->sem[AL_N])) != 0)
+                    exit_with_err("sem_post", err);
+            } else {
+                if ((err = sem_post(&sh->sem[MZ_N])) != 0)
+                    exit_with_err("sem_post", err);
+            }
         }
 
         i++; // incremento l'indice per l'array map
