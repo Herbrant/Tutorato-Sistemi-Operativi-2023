@@ -14,7 +14,7 @@ La struttura dati condivisa conterrà:
 - altri elementi ritenuti utili/necessari.
 
 I ruoli dei thread saranno i seguenti:
-- ciascun thread $i \in \{1,\dots, n\} leggerà l'$i$-esimo file passato da riga di comando e ne manterrà il contenuto in memoria sulla lista dinamica presente nella struttura dati condivisa; il file potrebbe avere un numero arbitrario di righe non noto a priori. Inoltre, ciascun thread, dopo aver inserito un nuovo elemento all'interno della lista, dovrà bloccarsi per *8* secondi (utilizzando la funzione *sleep*).
+- ciascun thread $i \in \{1,\dots, n\}$ leggerà l'$i$-esimo file passato da riga di comando e ne manterrà il contenuto in memoria sulla lista dinamica presente nella struttura dati condivisa; il file potrebbe avere un numero arbitrario di righe non noto a priori. Inoltre, ciascun thread, dopo aver inserito un nuovo elemento all'interno della lista, dovrà bloccarsi per *8* secondi (utilizzando la funzione *sleep*).
 
 - un thread *Q* si occuperà di prendere una chiave dallo standard input ed effettuerà una ricerca in tempo reale sulla lista singolamente linkata, stampando in output il valore associato (se la chiave esiste)
 
