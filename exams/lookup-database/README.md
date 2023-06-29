@@ -18,7 +18,7 @@ I ruoli dei thread saranno i seguenti:
 
 - un thread *Q* si occuperà di prendere una chiave dallo standard input ed effettuerà una ricerca in tempo reale sulla lista singolamente linkata, stampando in output il valore associato (se la chiave esiste)
 
-- un thread *C* si occuperà, ogni *9* secondi, di conteggiare il numero di entry (nodi) presenti all'interno della lista singolarmente linkata e stamperà tale statistica a video
+- un thread *C* si occuperà, ogni *8* secondi, di conteggiare il numero di entry (nodi) presenti all'interno della lista singolarmente linkata e stamperà tale statistica a video
 
 Al termine degli inserimenti da parte dei primi *n* thread, il thread *Q* dovrà continuare a leggere eventuali query dallo standard input e restituire in output il risultato.
 
