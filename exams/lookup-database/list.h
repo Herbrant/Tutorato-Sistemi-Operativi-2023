@@ -1,0 +1,26 @@
+#ifndef LIST_H
+#define LIST_H
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define KEY_SIZE 4096
+
+typedef struct __node {
+    char key[KEY_SIZE];
+    int value;
+    struct __node *next;
+} node;
+
+typedef struct {
+    node *head;
+} list;
+
+void init_list(list *l);
+void list_insert(list *l, const char *key, int value);
+void list_print(const list *l);
+bool list_search(const list *l, const char *key, int *result);
+int list_count(const list *l);
+void list_destroy(list *l);
+
+#endif
