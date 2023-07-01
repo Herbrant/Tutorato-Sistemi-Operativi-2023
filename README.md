@@ -25,4 +25,5 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 - [Morra Cinese (variabili condizione)](./exams/morra-cinese-cond/)
 - [Alpha stats](./exams/alpha-stats/)
 - [Lookup Database](./exams/lookup-database/)
+- [Palindrome Filter](./exams/palindrome-filter/)
 - [Binary Search Tree](./exams/binary-search-tree/)
