@@ -17,7 +17,7 @@ typedef struct {
 } list;
 
 void init_list(list *l);
-void list_insert(list *l, const char *key, int value);
+void list_insert(list *l, const char *key, const int value);
 void list_print(const list *l);
 bool list_search(const list *l, const char *key, int *result);
 int list_count(const list *l);

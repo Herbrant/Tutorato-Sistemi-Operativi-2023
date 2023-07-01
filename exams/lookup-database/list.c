@@ -2,16 +2,12 @@
 
 void init_list(list *l) { l->head = NULL; }
 
-void list_insert(list *l, const char *key, int value) {
+void list_insert(list *l, const char *key, const int value) {
     node *n = malloc(sizeof(node));
     strncpy(n->key, key, KEY_SIZE);
     n->value = value;
 
-    if (l->head != NULL)
-        n->next = l->head;
-    else
-        n->next = NULL;
-
+    n->next = l->head;
     l->head = n;
 }
 
@@ -22,6 +18,8 @@ void list_print(const list *l) {
         printf("(%s,%d) ", ptr->key, ptr->value);
         ptr = ptr->next;
     }
+
+    printf("\n");
 }
 
 bool list_search(const list *l, const char *key, int *result) {
