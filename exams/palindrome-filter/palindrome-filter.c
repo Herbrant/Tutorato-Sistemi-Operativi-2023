@@ -1,4 +1,4 @@
-#include "../lib/lib-misc.h"
+#include "../../lib/lib-misc.h"
 #include <linux/limits.h>
 #include <pthread.h>
 #include <semaphore.h>
@@ -55,11 +55,11 @@ void reader(void *arg) {
         exit_with_sys_err("fopen");
 
     while (fgets(buffer, BUFFER_SIZE, f)) {
-        if ((err = sem_wait(&td->shared->sem[READER_N])) != 0)
-            exit_with_err("sem_wait", err);
-
         if (buffer[strlen(buffer) - 1] == '\n')
             buffer[strlen(buffer) - 1] = '\0';
+
+        if ((err = sem_wait(&td->shared->sem[READER_N])) != 0)
+            exit_with_err("sem_wait", err);
 
         strncpy(td->shared->buffer, buffer, BUFFER_SIZE);
 

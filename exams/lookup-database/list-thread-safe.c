@@ -83,8 +83,7 @@ unsigned list_count(list *l) {
     int err;
     unsigned counter = 0;
 
-    if ((err = pthread_rwlock_rdlock(&l->lock)) != 0)
-        exit_with_err("pthread_rwlock_rdlock", err);
+    list_rlock(l);
 
     node *ptr = l->head;
 
@@ -93,13 +92,14 @@ unsigned list_count(list *l) {
         ptr = ptr->next;
     }
 
-    if ((err = pthread_rwlock_unlock(&l->lock)) != 0)
-        exit_with_err("pthread_rwlock_unlock", err);
+    list_unlock(l);
 
     return counter;
 }
 
 void list_destroy(list *l) {
+    list_wlock(l);
+
     node *ptr = l->head;
     node *tmp;
 

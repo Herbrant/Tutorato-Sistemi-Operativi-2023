@@ -1,4 +1,4 @@
-#include "../lib/lib-misc.h"
+#include "../../lib/lib-misc.h"
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdbool.h>

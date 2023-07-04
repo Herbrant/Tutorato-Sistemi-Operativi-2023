@@ -1,4 +1,4 @@
-#include "../lib/lib-misc.h"
+#include "../../lib/lib-misc.h"
 #include <ctype.h>
 #include <fcntl.h>
 #include <pthread.h>
