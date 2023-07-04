@@ -1,5 +1,5 @@
-#include "../lib/lib-misc.h"
-#include "list.h"
+#include "../../lib/lib-misc.h"
+#include "list-thread-safe.h"
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -10,9 +10,9 @@
 #define SLEEP_S 8
 
 typedef struct {
-    pthread_rwlock_t lock; // lock in lettura/scrittura
     bool done;
     list *l; // puntatore alla lista condivisa
+    pthread_mutex_t lock; // lock per il campo done
 } shared;
 
 typedef struct {
@@ -28,19 +28,18 @@ typedef struct {
 void init_shared(shared *sh) {
     int err;
 
-    // inizializzo il lock
-    if ((err = pthread_rwlock_init(&sh->lock, NULL)) != 0)
-        exit_with_err("pthread_rwlock_init", err);
-
-    // allocare la struttura dati per la lista
+    // alloco la struttura dati per la lista
     sh->l = malloc(sizeof(list));
+
+    // inizializzo il mutex
+    if ((err = pthread_mutex_init(&sh->lock, NULL)) != 0)
+        exit_with_err("pthread_mutex_init", err);
 
     sh->done = 0;
     init_list(sh->l);
 }
 
 void destroy_shared(shared *sh) {
-    pthread_rwlock_destroy(&sh->lock);
     list_destroy(sh->l);
     free(sh);
 }
@@ -65,24 +64,24 @@ void reader(void *arg) {
             value = atoi(s_value);
 
             // provo ad ottenere il lock in scrittura
-            if ((err = pthread_rwlock_wrlock(&td->shared->lock)) != 0)
-                exit_with_err("pthread_rwlock_wrlock", err);
+            if ((err = pthread_mutex_lock(&td->shared->lock)) != 0)
+                exit_with_err("pthread_mutex_lock", err);
 
             if (td->shared->done) {
                 printf("R%d: esco.\n", td->thread_n);
                 // rilascio il lock sulla struttura dati condivisa ed esco
-                if ((err = pthread_rwlock_unlock(&td->shared->lock)) != 0)
-                    exit_with_err("pthread_rwlock_unlock", err);
+                if ((err = pthread_mutex_unlock(&td->shared->lock)) != 0)
+                    exit_with_err("pthread_mutex_unlock", err);
 
                 break;
             }
 
+            // rilascio il lock sulla struttura dati condivisa
+            if ((err = pthread_mutex_unlock(&td->shared->lock)) != 0)
+                exit_with_err("pthread_mutex_unlock", err);
+
             // inserisco l'elemento all'interno della lista
             list_insert(td->shared->l, key, value);
-
-            // rilascio il lock sulla struttura dati condivisa
-            if ((err = pthread_rwlock_unlock(&td->shared->lock)) != 0)
-                exit_with_err("pthread_rwlock_unlock", err);
 
             printf("R%d: inserito l'elemento (%s,%d)\n", td->thread_n, key,
                    value);
@@ -109,27 +108,19 @@ void query(void *arg) {
 
             // verifico se l'utente ha chiesto di terminare
             if (!strcmp(query, "quit")) {
-                if ((err = pthread_rwlock_wrlock(&td->shared->lock)) != 0)
-                    exit_with_err("pthread_rwlock_wrlock", err);
+                if ((err = pthread_mutex_lock(&td->shared->lock)) != 0)
+                    exit_with_err("pthread_mutex_lock", err);
 
                 td->shared->done = 1;
 
-                if ((err = pthread_rwlock_unlock(&td->shared->lock)) != 0)
-                    exit_with_err("pthread_rwlock_unlock", err);
+                if ((err = pthread_mutex_unlock(&td->shared->lock)) != 0)
+                    exit_with_err("pthread_mutex_unlock", err);
 
                 printf("Q: chiusura dei thread...\n");
                 break;
             } else {
-                // provo a ottenere il lock lettura
-                if ((err = pthread_rwlock_rdlock(&td->shared->lock)) != 0)
-                    exit_with_err("pthread_rwlock_rdlock", err);
-
                 // effettuo una ricerca all'interno della lista
                 ret_value = list_search(td->shared->l, query, &result);
-
-                // rilascio il lock sulla struttura dati condivisa
-                if ((err = pthread_rwlock_unlock(&td->shared->lock)) != 0)
-                    exit_with_err("pthread_rwlock_unlock", err);
 
                 if (ret_value)
                     printf("Q: occorrenza trovata (%s,%d)\n", query, result);
@@ -147,22 +138,23 @@ void counter(void *arg) {
     int err, counter;
 
     while (1) {
-        if ((err = pthread_rwlock_rdlock(&td->shared->lock)) != 0)
-            exit_with_err("pthread_rwlock_rdlock", err);
+
+        if ((err = pthread_mutex_lock(&td->shared->lock)) != 0)
+            exit_with_err("pthread_mutex_lock", err);
 
         if (td->shared->done) {
             // rilascio il lock sulla struttura dati condivisa ed esco
-            if ((err = pthread_rwlock_unlock(&td->shared->lock)) != 0)
-                exit_with_err("pthread_rwlock_unlock", err);
+            if ((err = pthread_mutex_unlock(&td->shared->lock)) != 0)
+                exit_with_err("pthread_mutex_unlock", err);
 
             printf("C: esco.\n");
             break;
         }
 
-        counter = list_count(td->shared->l);
+        if ((err = pthread_mutex_unlock(&td->shared->lock)) != 0)
+            exit_with_err("pthread_mutex_unlock", err);
 
-        if ((err = pthread_rwlock_unlock(&td->shared->lock)) != 0)
-            exit_with_err("pthread_rwlock_unlock", err);
+        counter = list_count(td->shared->l);
 
         printf("C: sono presenti %d elementi all'interno della lista\n",
                counter);

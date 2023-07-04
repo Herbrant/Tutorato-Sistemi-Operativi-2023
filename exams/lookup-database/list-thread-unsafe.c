@@ -1,4 +1,4 @@
-#include "list.h"
+#include "list-thread-unsafe.h"
 
 void init_list(list *l) { l->head = NULL; }
 
@@ -35,7 +35,7 @@ bool list_search(const list *l, const char *key, int *result) {
     return 1;
 }
 
-int list_count(const list *l) {
+unsigned list_count(const list *l) {
     node *ptr = l->head;
     int counter = 0;
 

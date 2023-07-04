@@ -1,5 +1,5 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef LIST_THREAD_UNSAFE_H
+#define LIST_THREAD_UNSAFE_H
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +20,7 @@ void init_list(list *l);
 void list_insert(list *l, const char *key, const int value);
 void list_print(const list *l);
 bool list_search(const list *l, const char *key, int *result);
-int list_count(const list *l);
+unsigned list_count(const list *l);
 void list_destroy(list *l);
 
 #endif
