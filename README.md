@@ -23,6 +23,7 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 ## Strutture dati *thread-safe*
 - [Lista singolarmente linkata](./data-structures/list/)
 - [Hash table](./data-structures/hash-table/)
+- [Hash table (optimized)](./data-structures/hash-table/)
 
 ## Prove d'esame
 - [Morra Cinese (semafori)](./exams/morra-cinese-sem/)
