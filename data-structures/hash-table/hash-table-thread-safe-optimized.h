@@ -18,14 +18,14 @@ typedef struct {
     unsigned long size;
     unsigned long n;
     item **table;
-    pthread_rwlock_t lock;
+    pthread_rwlock_t *lock;
 } hash_table;
 
 hash_table *new_hash_table(unsigned long size);
+void hash_wlock(hash_table *h, unsigned long i);
+void hash_rlock(hash_table *h, unsigned long i);
+void hash_unlock(hash_table *h, unsigned long i);
 unsigned long hash_function(const char *key);
-void hash_table_wlock(hash_table *h);
-void hash_table_rlock(hash_table *h);
-void hash_table_unlock(hash_table *h);
 void hash_table_insert(hash_table *h, const char *key, const int value);
 bool hash_table_search(hash_table *h, const char *key, int *value);
 void hash_table_destroy(hash_table *h);
