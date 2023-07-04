@@ -20,6 +20,10 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 - [Homework 3](./homeworks/homework-3/): sorting
 - [Homework 4](./homeworks/homework-4/): Comando *cp* con ricorsione (estensione dell'homework 1)
 
+## Strutture dati *thread-safe*
+- [Lista singolarmente linkata](./data-structures/list/)
+- [Hash table](./data-structures/hash-table/)
+
 ## Prove d'esame
 - [Morra Cinese (semafori)](./exams/morra-cinese-sem/)
 - [Morra Cinese (variabili condizione)](./exams/morra-cinese-cond/)
