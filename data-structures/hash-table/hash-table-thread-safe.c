@@ -1,4 +1,6 @@
 #include "hash-table-thread-safe.h"
+#include "hash-table-thread-safe-optimized.h"
+#include <pthread.h>
 
 hash_table *new_hash_table(unsigned long size) {
     int err;
@@ -12,6 +14,27 @@ hash_table *new_hash_table(unsigned long size) {
         exit_with_err("pthread_rwlock_init", err);
 
     return h;
+}
+
+void hash_table_wlock(hash_table *h) {
+    int err;
+
+    if ((err = pthread_rwlock_wrlock(&h->lock)) != 0)
+        exit_with_err("pthread_rwlock_wrlock", err);
+}
+
+void hash_table_rlock(hash_table *h) {
+    int err;
+
+    if ((err = pthread_rwlock_rdlock(&h->lock)) != 0)
+        exit_with_err("pthread_rwlock_rdlock", err);
+}
+
+void hash_table_unlock(hash_table *h) {
+    int err;
+
+    if ((err = pthread_rwlock_unlock(&h->lock)) != 0)
+        exit_with_err("pthread_rwlock_unlock", err);
 }
 
 unsigned long hash_function(const char *key) {
@@ -29,30 +52,25 @@ void hash_table_insert(hash_table *h, const char *key, const int value) {
     item *i = malloc(sizeof(item));
     strncpy(i->key, key, KEY_SIZE);
     i->value = value;
-    unsigned long hindex = hash_function(key);
+    unsigned long hindex = hash_function(key) % h->size;
 
-    if ((err = pthread_rwlock_wrlock(&h->lock)) != 0)
-        exit_with_err("pthread_rwlock_wrlock", err);
+    hash_table_wlock(h);
 
-    hindex = hindex % h->size;
     i->next = h->table[hindex];
     h->table[hindex] = i;
     h->n++;
 
-    if ((err = pthread_rwlock_unlock(&h->lock)) != 0)
-        exit_with_err("pthread_rwlock_unlock", err);
+    hash_table_unlock(h);
 }
 
 bool hash_table_search(hash_table *h, const char *key, int *value) {
     int err;
     bool ret_value = 0;
     item *ptr;
-    unsigned long hindex = hash_function(key);
+    unsigned long hindex = hash_function(key) % h->size;
 
-    if ((err = pthread_rwlock_rdlock(&h->lock)) != 0)
-        exit_with_err("pthread_rwlock_rdlock", err);
+    hash_table_rlock(h);
 
-    hindex = hindex % h->size;
     ptr = h->table[hindex];
 
     while (ptr != NULL && strcmp(key, ptr->key))
@@ -63,8 +81,7 @@ bool hash_table_search(hash_table *h, const char *key, int *value) {
         *value = ptr->value;
     }
 
-    if ((err = pthread_rwlock_unlock(&h->lock)) != 0)
-        exit_with_err("pthread_rwlock_unlock", err);
+    hash_table_unlock(h);
 
     return ret_value;
 }
@@ -73,13 +90,11 @@ unsigned long hash_table_get_n(hash_table *h) {
     int err;
     unsigned long n;
 
-    if ((err = pthread_rwlock_rdlock(&h->lock)) != 0)
-        exit_with_err("pthread_rwlock_rdlock", err);
+    hash_table_rlock(h);
 
     n = h->n;
 
-    if ((err = pthread_rwlock_unlock(&h->lock)) != 0)
-        exit_with_err("pthread-rwlock_unlock", err);
+    hash_table_unlock(h);
 
     return n;
 }
@@ -98,8 +113,7 @@ void list_destroy(item *l) {
 void hash_table_destroy(hash_table *h) {
     int err;
 
-    if ((err = pthread_rwlock_wrlock(&h->lock)) != 0)
-        exit_with_err("pthread_rwlock_wrlock", err);
+    hash_table_wlock(h);
 
     for (unsigned long i = 0; i < h->size; i++)
         list_destroy(h->table[i]);
