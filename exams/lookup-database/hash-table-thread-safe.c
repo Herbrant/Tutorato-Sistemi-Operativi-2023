@@ -1,6 +1,4 @@
 #include "hash-table-thread-safe.h"
-#include "hash-table-thread-safe-optimized.h"
-#include <pthread.h>
 
 hash_table *new_hash_table(unsigned long size) {
     int err;
