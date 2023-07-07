@@ -31,4 +31,5 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 - [Alpha stats](./exams/alpha-stats/)
 - [Lookup Database](./exams/lookup-database/)
 - [Palindrome Filter](./exams/palindrome-filter/)
+- [File size](./exams/file-size/)
 - [Binary Search Tree](./exams/binary-search-tree/)
