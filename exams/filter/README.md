@@ -4,14 +4,14 @@ Creare un programma **filter.c** in linguaggio C che accetti invocazioni sulla r
 filter <file.txt> <filter-1> [filter-2] [...]
 ```
 
-Il programma sostanzialmente leggerà il file di testo indicato e applicherà ad ogni riga una serie di filtri indicati sulla riga di comando. Potrebbero essere presenti uno o piùfiltri. Il risultato finale sarà poi mostrato sullo standard output. Ogni filtro avrà la seguente struttura:
+Il programma sostanzialmente leggerà il file di testo indicato e applicherà ad ogni riga una serie di filtri indicati sulla riga di comando. Potrebbero essere presenti uno o più filtri. Il risultato finale sarà poi mostrato sullo standard output. Ogni filtro avrà la seguente struttura:
 - **^parola**: andrà a cercare in ogni riga le occorrenze di “parola” e le trasformeràusando solo lettere maiuscole;
 - **_parola**: farà lo stesso ma trasformandole usando solo lettere minuscole;
 - **%parola1,parola2**: andrà a cercare in ogni riga le occorrenze di “parola1” e lesostituirà con “parola2” (attenzione: le due parole potrebbero avere lunghezzediverse).
 
 All'avvio, il programma creerà preventivamente tanti thraed del tipo **Filter-n** quanti sono i filtri indicati sulla riga di comando. Tutti i thread condivideranno una struttura dati condivisa (di dimensione idonea agestire righe lunghe al più **MAX_LEN=1024** caratteri) ed un numero idoneo di mutex e variabili condizione.
 
-Il main thread leggerà il file indicato riga per riga; letta una riga la depositerà nella struttura dati condivisa e ne segnalerà la disponibilità al primo thread Filter-1 utilizzando isemafori. Il generico figlio Filter-n, letta la riga in input, applicherà la propria modifica(per tutte le occorrenze presenti) e segnalerà il completamento del proprio compito al thread seguente Filter-(n+1). L'ultimo thread del tipo Filter-n segnalerà la disponibilità della riga processata al main thread che provvederà a riversarla sullo standard output e passerà alla riga successiva.
+Il main thread leggerà il file indicato riga per riga; letta una riga la depositerà nella struttura dati condivisa e ne segnalerà la disponibilità al primo thread Filter-1. Il generico figlio Filter-n, letta la riga in input, applicherà la propria modifica(per tutte le occorrenze presenti) e segnalerà il completamento del proprio compito al thread seguente Filter-(n+1). L'ultimo thread del tipo Filter-n segnalerà la disponibilità della riga processata al main thread che provvederà a riversarla sullo standard output e passerà alla riga successiva.
 
 Tutti i thread, per qualsiasi input, dovranno spontaneamente terminare e deallocare le strutture dati utilizzate alla fine dei lavori.
 
