@@ -5,9 +5,9 @@ filter <file.txt> <filter-1> [filter-2] [...]
 ```
 
 Il programma sostanzialmente leggerà il file di testo indicato e applicherà ad ogni riga una serie di filtri indicati sulla riga di comando. Potrebbero essere presenti uno o più filtri. Il risultato finale sarà poi mostrato sullo standard output. Ogni filtro avrà la seguente struttura:
-- **^parola**: andrà a cercare in ogni riga le occorrenze di “parola” e le trasformeràusando solo lettere maiuscole;
+- **^parola**: andrà a cercare in ogni riga le occorrenze di "parola" e le trasformerà usando solo lettere maiuscole;
 - **_parola**: farà lo stesso ma trasformandole usando solo lettere minuscole;
-- **%parola1,parola2**: andrà a cercare in ogni riga le occorrenze di “parola1” e lesostituirà con “parola2” (attenzione: le due parole potrebbero avere lunghezzediverse).
+- **%parola1,parola2**: andrà a cercare in ogni riga le occorrenze di "parola1" e le sostituirà con "parola2" (attenzione: le due parole potrebbero avere lunghezze diverse).
 
 All'avvio, il programma creerà preventivamente tanti thraed del tipo **Filter-n** quanti sono i filtri indicati sulla riga di comando. Tutti i thread condivideranno una struttura dati condivisa (di dimensione idonea agestire righe lunghe al più **MAX_LEN=1024** caratteri) ed un numero idoneo di mutex e variabili condizione.
 
