@@ -292,7 +292,6 @@ int main(int argc, char **argv) {
     shared_db *sdb = malloc(sizeof(shared_db));
     shared_c *sc = malloc(sizeof(shared_c));
 
-    printf("nthread: %u\n", nthread);
     init_shared_db(sdb, nthread);
     init_shared_c(sc);
 
