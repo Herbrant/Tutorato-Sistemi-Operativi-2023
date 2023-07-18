@@ -1,7 +1,7 @@
 # Lookup database with barrier
 Creare un programma **lookup-database-with-barrier.c** in linguaggio C che accetti invocazioni sulla riga di comando del tipo:
 ```bash
-lookup-database-with-barrier <db-file-1> <db-file-2> <...> <db-file-n> -q <query-file-1> <query-file-2> <...> <query-file-n>
+lookup-database-with-barrier <db-file-1> <db-file-2> <...> <db-file-n> <query-file-1> <query-file-2> <...> <query-file-n>
 ```
 
 Il programma dovrà fondamentalmente leggere *n* file *database* con coppie del tipo *(nome, valore)* e ricercare al loro interno i nomi che compaiono nei file di query.
