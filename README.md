@@ -32,4 +32,5 @@ Le slide proiettate durante gli incontri possono essere scaricate [qui](./shell/
 - [File size](./exams/file-size/)
 - [Filter](./exams/filter/)
 - [Lookup Database with barrier](./exams/lookup-database-with-barrier/)
+- [my-fgrep](./exams/my-fgrep/)
 - [Binary Search Tree](./exams/binary-search-tree/)
