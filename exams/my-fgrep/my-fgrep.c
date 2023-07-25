@@ -291,7 +291,7 @@ void writer(void *arg) {
 }
 
 int main(int argc, char **argv) {
-    if (argc < 2) {
+    if (argc < 3) {
         printf("Usage: %s [-v] [-i] [word] <file-1> [file-2] [file-3] [...]\n",
                argv[0]);
 
