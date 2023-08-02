@@ -301,9 +301,9 @@ int main(int argc, char **argv) {
 
     // creazione dei thread ADD-j
     for (int i = 0; i < 2; i++) {
-        td[i + argc - 1].sh = sh;
-        td[i + argc - 1].thread_n = i + 1;
-        td[i + argc - 1].ndir = ndir;
+        td[i + ndir].sh = sh;
+        td[i + ndir].thread_n = i + 1;
+        td[i + ndir].ndir = ndir;
 
         if ((err = pthread_create(&td[i + ndir].tid, NULL, (void *)add,
                                   &td[i + ndir])) != 0)
