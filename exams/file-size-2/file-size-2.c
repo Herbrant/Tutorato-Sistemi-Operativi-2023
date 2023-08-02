@@ -8,7 +8,11 @@
 #include <string.h>
 #include <sys/stat.h>
 
-// Implementazione di una lista doppiamente linkata
+/* Implementazione di una lista doppiamente linkata
+   NOTA: l'utilizzo di una lista ordinata migliorerebbe il tempo di esecuzione
+   del nostro programma (estrazione del minimo e del massimo in testa e in
+   coda). Per semplicità implementiamo una lista singolarmente linkata.
+*/
 typedef struct __node {
     unsigned long value;
     struct __node *next;
@@ -48,6 +52,7 @@ int extract_min(list *l) {
     node *min_ptr = l->head;
     node *ptr = l->head->next;
 
+    // ricerco il minimo all'interno della lista
     while (ptr != NULL) {
         if (ptr->value < min_ptr->value)
             min_ptr = ptr;
@@ -57,6 +62,7 @@ int extract_min(list *l) {
 
     min = min_ptr->value;
 
+    // cancellazione del nodo contenente il minimo
     if (min_ptr->prev != NULL)
         min_ptr->prev->next = min_ptr->next;
 
@@ -82,6 +88,7 @@ int extract_max(list *l) {
     node *max_ptr = l->head;
     node *ptr = l->head->next;
 
+    // ricerco il massimo all'interno della lista
     while (ptr != NULL) {
         if (ptr->value < max_ptr->value)
             max_ptr = ptr;
@@ -91,6 +98,7 @@ int extract_max(list *l) {
 
     max = max_ptr->value;
 
+    // cancellazione del nodo contenente il massimo
     if (max_ptr->prev != NULL)
         max_ptr->prev->next = max_ptr->next;
 
@@ -122,10 +130,13 @@ void list_destroy(list *l) {
 typedef struct {
     list *l;
     unsigned done;
+
+    // strumenti per la sincronizzazione e la mutua esclusione
     pthread_mutex_t lock;
     pthread_cond_t cond;
 } number_set;
 
+// inizializza la struttura dati condivisa
 void init_number_set(number_set *ns) {
     int err;
 
@@ -140,6 +151,7 @@ void init_number_set(number_set *ns) {
         exit_with_err("pthread_cond_init", err);
 }
 
+// dealloca la struttura dati condivisa
 void destroy_number_set(number_set *ns) {
     list_destroy(ns->l);
     pthread_mutex_destroy(&ns->lock);
@@ -158,6 +170,7 @@ typedef struct {
     number_set *sh;
 } thread_data;
 
+// start_routine per i thread DIR-i
 void dir_scanner(void *arg) {
     int err;
     thread_data *td = (thread_data *)arg;
@@ -192,6 +205,7 @@ void dir_scanner(void *arg) {
 
             list_insert(td->sh->l, statbuf.st_size);
 
+            // risveglio un thread ADD-j
             if ((err = pthread_cond_signal(&td->sh->cond)) != 0)
                 exit_with_err("pthread_cond_signal", err);
 
@@ -201,23 +215,28 @@ void dir_scanner(void *arg) {
         }
     }
 
+    // acquisisco il lock sulla struttura dati condivisa
     if ((err = pthread_mutex_lock(&td->sh->lock)) != 0)
         exit_with_err("pthread_mutex_lock", err);
 
     td->sh->done++;
 
+    // risveglio entrambi i thread ADD-j
     if ((err = pthread_cond_signal(&td->sh->cond)) != 0)
         exit_with_err("pthread_cond_signal", err);
 
     if ((err = pthread_cond_signal(&td->sh->cond)) != 0)
         exit_with_err("pthread_cond_signal", err);
 
+    // rilascio il lock
     if ((err = pthread_mutex_unlock(&td->sh->lock)) != 0)
         exit_with_err("pthread_mutex_unlock", err);
 
+    // chiudo la directory
     closedir(dp);
 }
 
+// start_routine per i thread ADD-j
 void add(void *arg) {
     int err;
     thread_data *td = (thread_data *)arg;
@@ -227,14 +246,16 @@ void add(void *arg) {
     printf("[ADD-%u]: sono partito\n", td->thread_n);
 
     while (1) {
+        // acquisisco il lock sulla struttura dati condivisa
         if ((err = pthread_mutex_lock(&td->sh->lock)) != 0)
             exit_with_err("pthread_mutex_lock", err);
 
-        // verifico le condizioni di operabilità o di terminazione
+        // verifico le condizioni di operabilità o di possibile terminazione
         while (td->sh->l->size < 2 && td->sh->done != td->ndir)
             if ((err = pthread_cond_wait(&td->sh->cond, &td->sh->lock)) != 0)
                 exit_with_err("pthread_cond_wait", err);
 
+        // verifico se devo terminare
         if (td->sh->done == td->ndir && td->sh->l->size == 1) {
             // rilascio il lock sulla struttura dati condivisa
             if ((err = pthread_mutex_unlock(&td->sh->lock)) != 0)
@@ -242,10 +263,12 @@ void add(void *arg) {
             break;
         }
 
+        // estraggo il minimo e il massimo e ne calcolo la somma
         min = extract_min(td->sh->l);
         max = extract_max(td->sh->l);
         sum = min + max;
 
+        // inserisco la somma all'interno della lista
         list_insert(td->sh->l, sum);
 
         printf("[ADD-%u] il minimo (%lu) ed il massimo (%lu) sono stati "
@@ -269,7 +292,7 @@ int main(int argc, char **argv) {
     number_set *sh = malloc(sizeof(number_set));
     init_number_set(sh);
 
-    // DIR-i
+    // creazione dei thread DIR-i
     for (int i = 0; i < argc - 1; i++) {
         td[i].thread_n = i + 1;
         td[i].dirname = argv[i + 1];
@@ -280,7 +303,7 @@ int main(int argc, char **argv) {
             exit_with_err("pthread_create", err);
     }
 
-    // ADD-j
+    // creazione dei thread ADD-j
     for (int i = 0; i < 2; i++) {
         td[i + argc - 1].sh = sh;
         td[i + argc - 1].thread_n = i + 1;
@@ -299,5 +322,6 @@ int main(int argc, char **argv) {
            "%lu byte.\n",
            sh->l->head->value);
 
+    // dealloco la struttura dati condivisa
     destroy_number_set(sh);
 }
