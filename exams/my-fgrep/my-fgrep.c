@@ -305,12 +305,12 @@ int main(int argc, char **argv) {
     bool i_flag = 0;
 
     // parsing delle flag -i/-v (opzionali)
-    if (!strcmp(argv[1], "-v") || (argc > 2 && !strcmp(argv[2], "-v"))) {
+    if (!strcmp(argv[1], "-v") || !strcmp(argv[2], "-v")) {
         v_flag = 1;
         _from++;
     }
 
-    if (!strcmp(argv[1], "-i") || (argc > 2 && !strcmp(argv[2], "-i"))) {
+    if (!strcmp(argv[1], "-i") || !strcmp(argv[2], "-i")) {
         i_flag = 1;
         _from++;
     }
