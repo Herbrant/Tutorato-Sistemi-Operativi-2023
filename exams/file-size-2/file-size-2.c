@@ -11,7 +11,7 @@
 /* Implementazione di una lista doppiamente linkata
    NOTA: l'utilizzo di una lista ordinata migliorerebbe il tempo di esecuzione
    del nostro programma (estrazione del minimo e del massimo in testa e in
-   coda). Per semplicità implementiamo una lista singolarmente linkata.
+   coda). Per semplicità implementiamo una lista doppiamente linkata.
 */
 typedef struct __node {
     unsigned long value;
