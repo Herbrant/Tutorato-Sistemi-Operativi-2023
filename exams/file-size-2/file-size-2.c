@@ -222,10 +222,7 @@ void dir_scanner(void *arg) {
     td->sh->done++;
 
     // risveglio entrambi i thread ADD-j
-    if ((err = pthread_cond_signal(&td->sh->cond)) != 0)
-        exit_with_err("pthread_cond_signal", err);
-
-    if ((err = pthread_cond_signal(&td->sh->cond)) != 0)
+    if ((err = pthread_cond_broadcast(&td->sh->cond)) != 0)
         exit_with_err("pthread_cond_signal", err);
 
     // rilascio il lock
@@ -286,12 +283,13 @@ int main(int argc, char **argv) {
     }
 
     int err;
-    thread_data td[argc + 1];
+    int ndir = argc - 1;
+    thread_data td[ndir + 2];
     number_set *sh = malloc(sizeof(number_set));
     init_number_set(sh);
 
     // creazione dei thread DIR-i
-    for (int i = 0; i < argc - 1; i++) {
+    for (int i = 0; i < ndir; i++) {
         td[i].thread_n = i + 1;
         td[i].dirname = argv[i + 1];
         td[i].sh = sh;
@@ -305,14 +303,14 @@ int main(int argc, char **argv) {
     for (int i = 0; i < 2; i++) {
         td[i + argc - 1].sh = sh;
         td[i + argc - 1].thread_n = i + 1;
-        td[i + argc - 1].ndir = argc - 1;
+        td[i + argc - 1].ndir = ndir;
 
-        if ((err = pthread_create(&td[i + argc - 1].tid, NULL, (void *)add,
-                                  &td[i + argc - 1])) != 0)
+        if ((err = pthread_create(&td[i + ndir].tid, NULL, (void *)add,
+                                  &td[i + ndir])) != 0)
             exit_with_err("pthread_create", err);
     }
 
-    for (int i = 0; i < argc + 1; i++)
+    for (int i = 0; i < ndir + 2; i++)
         if ((err = pthread_join(td[i].tid, NULL)) != 0)
             exit_with_err("pthread_join", err);
 
