@@ -243,8 +243,6 @@ void add(void *arg) {
     unsigned long min, max, sum;
     unsigned done = 0;
 
-    printf("[ADD-%u]: sono partito\n", td->thread_n);
-
     while (1) {
         // acquisisco il lock sulla struttura dati condivisa
         if ((err = pthread_mutex_lock(&td->sh->lock)) != 0)
