@@ -1,12 +1,6 @@
 # Tutorato-Sistemi-Operativi-2023
 Codici per il Tutorato di Sistemi Operativi @ DMI, UNICT (2023)
 
-## Orario
-### Lezioni
-- **Martedì**: **08:00** - **13:00** (Aula 24)
-### Ricevimento
-- **Giovedì**: **08:00** - **13:00** (Aula 24)
-
 ## Tutorial sulla shell GNU/Linux
 I primi 2 incontri del tutorato sono stati riservati ad un Tutorial sulla Shell GNU/Linux e un'introduzione al BASH scripting.
 
