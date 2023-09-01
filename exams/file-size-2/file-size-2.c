@@ -42,13 +42,13 @@ void list_insert(list *l, const int value) {
     l->size++;
 }
 
-int extract_min(list *l) {
+unsigned long extract_min(list *l) {
     // controllo ridondante (non dovrei chiamare la funzione quando non ci sono
     // elementi)
     if (l->head == NULL)
         return 0;
 
-    int min;
+    unsigned long min;
     node *min_ptr = l->head;
     node *ptr = l->head->next;
 
@@ -78,19 +78,19 @@ int extract_min(list *l) {
     return min;
 }
 
-int extract_max(list *l) {
+unsigned long extract_max(list *l) {
     // controllo ridondante (non dovrei chiamare la funzione quando non ci sono
     // elementi)
     if (l->head == NULL)
         return 0;
 
-    int max;
+    unsigned long max;
     node *max_ptr = l->head;
     node *ptr = l->head->next;
 
     // ricerco il massimo all'interno della lista
     while (ptr != NULL) {
-        if (ptr->value < max_ptr->value)
+        if (ptr->value > max_ptr->value)
             max_ptr = ptr;
 
         ptr = ptr->next;
@@ -223,7 +223,7 @@ void dir_scanner(void *arg) {
 
     // risveglio entrambi i thread ADD-j
     if ((err = pthread_cond_broadcast(&td->sh->cond)) != 0)
-        exit_with_err("pthread_cond_signal", err);
+        exit_with_err("pthread_cond_broadcast", err);
 
     // rilascio il lock
     if ((err = pthread_mutex_unlock(&td->sh->lock)) != 0)
@@ -283,7 +283,7 @@ int main(int argc, char **argv) {
     }
 
     int err;
-    int ndir = argc - 1;
+    unsigned ndir = argc - 1;
     thread_data td[ndir + 2];
     number_set *sh = malloc(sizeof(number_set));
     init_number_set(sh);
