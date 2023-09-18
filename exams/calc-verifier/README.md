@@ -5,12 +5,9 @@ di comando del tipo:
 ```
 calc-verifier <calc-file-1> <calc-file-2> ... <calc-file- n >
 ```
-Il programma dovrà essere in grado di verificare la correttezza di una sequenza di
-
-semplici operazioni matematiche descritte nei file testuali forniti in input.
+Il programma dovrà essere in grado di verificare la correttezza di una sequenza di semplici operazioni matematiche descritte nei file testuali forniti in input.
 
 Ogni file contiene:
-
 - nella prima riga il valore iniziale del calcolo;
 - una serie di righe del tipo <operazione valore>, dove operazione può essere una
     tra ( + , - , x ) e valore un valore intero da usare come secondo operando insieme al
@@ -25,10 +22,7 @@ Al suo avvio il programma creerà _n+3_ thread:
 - tre thread ADD, SUB e MUL che avranno il compito di supportare gli altri thread per
     applicare la rispettiva operazione quando necessario.
 
-I thread si coordineranno tramite variabili condizione e mutex: da usare in numero e
-modalità opportune da determinare da parte dello studente. Le uniche strutture dati
-
-condivise dai thread (oltre agli strumenti di coordinamento predetti) saranno:
+I thread si coordineranno tramite variabili condizione e mutex: da usare in numero e modalità opportune da determinare da parte dello studente. Le uniche strutture dati condivise dai thread (oltre agli strumenti di coordinamento predetti) saranno:
 
 - operando_1: intero di tipo long long;
 - operando_2: intero di tipo long long;
@@ -36,20 +30,10 @@ condivise dai thread (oltre agli strumenti di coordinamento predetti) saranno:
 - operazione: identificativo dell'operazione da computare;
 - richiedente: identificativo del thread che ha richiesto l'operazione.
 
-Un thread di tipo CALC dovrà leggere il valore iniziale dalla prima riga e, per ogni
-operazione incontrata, depositare i valori opportuni nelle variabili condivise e attivare il
+Un thread di tipo CALC dovrà leggere il valore iniziale dalla prima riga e, per ogni operazione incontrata, depositare i valori opportuni nelle variabili condivise e attivare il thread per effettuare il relativo calcolo. Come ultima riga del file (quindi senza segno d'operazione) troverà il risultato atteso: il thread riporterà l'esito del controllo sul proprio standard output.
 
-thread per effettuare il relativo calcolo. Come ultima riga del file (quindi senza segno
-d'operazione) troverà il risultato atteso: il thread riporterà l'esito del controllo sul
-
-proprio standard output.
-
-Il programma dovrà funzionare con un qualunque numero di file in input. Tutti i thread
-
-secondari dovranno terminare spontaneamente alla fine dei lavori attesi e alla fine il
-thread principale dovrà visualizzare un riepilogo sul numero di verifiche andate a buon
-
-fine.
+Il programma dovrà funzionare con un qualunque numero di file in input. Tutti i thread secondari dovranno terminare spontaneamente alla fine dei lavori attesi e alla fine il
+thread principale dovrà visualizzare un riepilogo sul numero di verifiche andate a buon fine.
 
 Si chiede di rispettare la struttura dell'output riportato nell'esempio a seguire.
 
