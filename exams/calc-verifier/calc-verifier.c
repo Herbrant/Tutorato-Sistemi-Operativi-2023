@@ -98,7 +98,7 @@ void calc_thread(void *arg) {
         if (buffer[strlen(buffer) - 1] == '\n')
             buffer[strlen(buffer) - 1] = '\0';
 
-        // bisognerebbe implementare un controllo migliore, magari contanto il
+        // bisognerebbe implementare un controllo migliore, magari contando il
         // numero di linee presenti nel file per individuare il risultato atteso
         if (buffer[1] != ' ') {
             risultato = atoll(buffer);
@@ -331,6 +331,11 @@ void mul_thread(void *arg) {
 }
 
 int main(int argc, char **argv) {
+    if (argc < 2) {
+        printf("Usage: %s <calc-file-1> <calc-file-2> ... <calc-file-n>\n",
+               argv[0]);
+        exit(EXIT_FAILURE);
+    }
     int err;
     thread_data td[3 + argc - 1];
     shared *sh = malloc(sizeof(shared));
