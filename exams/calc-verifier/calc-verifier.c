@@ -65,6 +65,7 @@ void shared_destroy(shared *sh) {
     pthread_cond_destroy(&sh->cond_add);
     pthread_cond_destroy(&sh->cond_sub);
     pthread_cond_destroy(&sh->cond_mul);
+    free(sh);
 }
 
 void calc_thread(void *arg) {
